@@ -21,8 +21,6 @@ use {
 pub enum PrecompileError {
     #[error("public key is not valid")]
     InvalidPublicKey,
-    #[error("id is not valid")]
-    InvalidRecoveryId,
     #[error("signature is not valid")]
     InvalidSignature,
     #[error("offset not valid")]
