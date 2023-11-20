@@ -107,6 +107,7 @@ async function extractVectors(sourceName: string, sourceObj: any) {
       // "acceptable" means Wycheproof doesn't say either result is mandatory.
       // We have two "acceptable" vectors, both valid according to SubtleCrypto.
       const valid = result === "valid" || result === "acceptable";
+      
 
       // calculate SHA256 hash of msgBytes
       const msgBytes = Buffer.from(msg, "hex");
@@ -122,15 +123,15 @@ async function extractVectors(sourceName: string, sourceObj: any) {
         valid,
         msg,
         comment: `${testStr}: ${comment}`,
+        result,
       });
     }
   }
-
   return vectors;
 }
 
 // Parse r,s from an ASN.1-encoded signature
-function tryParseASN(sig: string): [string, string] {
+export function tryParseASN(sig: string): [string, string] {
   let r, rLen, s, sLen, totalLen;
   let rem = consume(sig, "30"); // SEQUENCE
   [totalLen, rem] = read(rem, 2); // length, verified at the end
