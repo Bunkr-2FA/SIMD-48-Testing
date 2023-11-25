@@ -7,7 +7,6 @@ use secp256r1_instruction::*;
 use format_secp256r1_vector::*;
 use std::io::{self, BufRead, BufReader};
 use solana_sdk::feature_set::FeatureSet;
-use std::time::Instant;
 
 
     fn main() -> io::Result<()> {

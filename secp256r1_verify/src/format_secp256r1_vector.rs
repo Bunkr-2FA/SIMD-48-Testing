@@ -1,4 +1,4 @@
-use bytemuck::{bytes_of};
+use bytemuck::bytes_of;
 use hex;
 use p256::elliptic_curve::bigint::Encoding;
 use serde::{Deserialize, Serialize};

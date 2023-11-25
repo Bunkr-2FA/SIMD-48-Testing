@@ -1,7 +1,6 @@
 
 #[cfg(test)]
 mod tests {
-    use super::*; // Import everything from the outer module
     use p256::ecdsa::SigningKey;
     use rand::rngs::OsRng;
     use solana_sdk::feature_set::FeatureSet;
