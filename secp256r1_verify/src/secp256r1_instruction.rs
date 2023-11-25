@@ -1,7 +1,3 @@
-//! Instructions for the [secp256r1 native program][np].
-//!
-//! [np]: https://docs.solana.com/developing/runtime-facilities/programs#secp256r1-program
-
 use {
     bytemuck::{bytes_of,Zeroable, Pod},
     solana_sdk::{
@@ -39,13 +35,13 @@ pub const DATA_START: usize = SIGNATURE_OFFSETS_SERIALIZED_SIZE + SIGNATURE_OFFS
 #[derive(Default, Debug, Copy, Clone, Zeroable,Pod, Eq, PartialEq)]
 #[repr(C)]
 pub struct Secp256r1SignatureOffsets {
-    signature_offset: u16,             // offset to compact secp256r1 signature of 64 bytes
-    signature_instruction_index: u16,  // instruction index to find signature
-    public_key_offset: u16,            // offset to compressed public key of 33 bytes
-    public_key_instruction_index: u16, // instruction index to find public key
-    message_data_offset: u16,          // offset to start of message data
-    message_data_size: u16,            // size of message data
-    message_instruction_index: u16,    // index of instruction data to get message data
+    pub signature_offset: u16,             // offset to compact secp256r1 signature of 64 bytes
+    pub signature_instruction_index: u16,  // instruction index to find signature
+    pub public_key_offset: u16,            // offset to compressed public key of 33 bytes
+    pub public_key_instruction_index: u16, // instruction index to find public key
+    pub message_data_offset: u16,          // offset to start of message data
+    pub message_data_size: u16,            // size of message data
+    pub message_instruction_index: u16,    // index of instruction data to get message data
 }
 
 pub fn new_secp256r1_instruction(signer: &SigningKey, message: &[u8]) -> Instruction {
