@@ -4,7 +4,7 @@ mod tests {
     use p256::ecdsa::SigningKey;
     use rand::rngs::OsRng;
     use solana_sdk::feature_set::FeatureSet;
-    use crate::secp256r1_instruction::{self, verify};
+    use crate::secp256r1_instruction::{self, verify, new_secp256r1_instruction};
 
     #[test]
     // Test that a valid signature is verified successfully
@@ -12,7 +12,7 @@ mod tests {
         let signing_key = SigningKey::random(&mut OsRng);
         let feature_set = &FeatureSet::all_enabled();
         let message = b"Hello, world!";
-        let instruction = secp256r1_instruction::new_secp256r1_instruction(&signing_key, message);
+        let instruction = new_secp256r1_instruction(&signing_key, message);
         let instruction_data = instruction.data.clone();
         let result = verify(&instruction_data, &[&[0u8; 100]], feature_set);
         assert!(result.is_ok(), "Verification failed when it should pass.");

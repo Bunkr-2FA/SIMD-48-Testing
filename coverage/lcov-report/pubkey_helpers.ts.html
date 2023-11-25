@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for create_pem_pubkey.ts</title>
+    <title>Code coverage report for pubkey_helpers.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="prettify.css" />
     <link rel="stylesheet" href="base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="index.html">All files</a> create_pem_pubkey.ts</h1>
+        <h1><a href="index.html">All files</a> pubkey_helpers.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>62/62</span>
+                <span class='fraction'>46/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/9</span>
+                <span class='fraction'>6/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/3</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>62/62</span>
+                <span class='fraction'>46/46</span>
             </div>
         
             
@@ -112,31 +112,7 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -145,19 +121,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -191,10 +160,16 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { BerWriter, Ber } from 'asn1';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">&nbsp;
 &nbsp;
-&nbsp;
-export function uncompressedPublicKeyHex(x: string, y: string) {
+/**
+ * Creates properly formatted uncompressed pubkey from ```x``` and ```y``` coordinates
+ * @param x x-coordinate of pubkey as hex-string
+ * @param y y-coordinate of pubkey as hex-string
+ * @returns Uncompressed pubkey as hex-string
+ */
+export function uncompressedPublicKeyHex(x: string, y: string): string {
   // Truncate or pad each coordinate to 32 bytes (64 hex characters)
   const xPadded = x.length &gt; 64 ? x.slice(-64) : x.padStart(64, '0');
   const yPadded = y.length &gt; 64 ? y.slice(-64) : y.padStart(64, '0');
@@ -202,6 +177,12 @@ export function uncompressedPublicKeyHex(x: string, y: string) {
   return '04' + xPadded + yPadded;
 }
 &nbsp;
+/**
+ * Creates DER formatted signature from ```r``` and ```s``` values
+ * @param rHex r component as hex-string
+ * @param sHex s component as hex-string
+ * @returns DER signature in hex-string
+ */
 export function derFromRS(rHex: string, sHex: string) {
   const rBuffer = Buffer.from(rHex, 'hex');
   const sBuffer = Buffer.from(sHex, 'hex');
@@ -227,32 +208,6 @@ export function derFromRS(rHex: string, sHex: string) {
   return derEncoded.toString('hex');
 }
 &nbsp;
-/**
- * Creates a public key in PEM format from the x and y coordinates of a public key.
- * @param x The x coordinate of the public key in hex format.
- * @param y The y coordinate of the public key in hex format.
- * @returns 
- */
-export function createPublicKeyPem(x: string, y: string): string {
-&nbsp;
-  const publicKeyBuffer = Buffer.from(uncompressedPublicKeyHex(x, y), 'hex');
-&nbsp;
-  const writer = new BerWriter();
-&nbsp;
-  writer.startSequence();
-    writer.startSequence();
-      writer.writeOID('1.2.840.10045.2.1', Ber.OID); // ecPublicKey OID
-      writer.writeOID('1.2.840.10045.3.1.7', Ber.OID); // prime256v1 OID
-    writer.endSequence();
-    // Write the public key as a BitString, including the unused bits byte
-    writer.writeBuffer(Buffer.concat([Buffer.from([0x00]), publicKeyBuffer]), Ber.BitString);
-  writer.endSequence();
-&nbsp;
-  const derBuffer = writer.buffer;
-  const pem = `-----BEGIN PUBLIC KEY-----\n${derBuffer.toString('base64').match(/.{1,64}/g)?.join('\n')}\n-----END PUBLIC KEY-----`;
-&nbsp;
-  return pem;
-}
 &nbsp;
 &nbsp;
 &nbsp;</pre></td></tr></table></pre>
@@ -262,7 +217,7 @@ export function createPublicKeyPem(x: string, y: string): string {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-11-23T20:46:25.595Z
+                at 2023-11-25T20:24:06.087Z
             </div>
         <script src="prettify.js"></script>
         <script>

@@ -14,7 +14,6 @@ const filePaths = [
 async function main() {
     try {
         const vectors: Vector[] = [];
-
         // For every file in filePaths, parse and push the respective vectors into vectors
         for (const filePath of filePaths) {
             const fileVectors = await readJsonLFile(filePath);
@@ -44,7 +43,6 @@ async function main() {
         // Log the total number of vectors as well and the amount of mismatched ones
         console.log(`Total number of vectors: ${vectors.length}`);
         console.log(`Total number of mismatched vectors: ${countMismatch}`);
-
     } catch (error) {
         console.error(`Error reading the file: ${error}`);
     }
