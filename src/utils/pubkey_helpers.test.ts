@@ -1,4 +1,4 @@
-import { createPublicKeyPem, uncompressedPublicKeyHex, derFromRS} from "./create_pem_pubkey";
+import { uncompressedPublicKeyHex, derFromRS } from "./pubkey_helpers";
 
 describe('Public Key Tests', () => {
     // Test for uncompressed public key hex string with padding
@@ -25,14 +25,6 @@ describe('Public Key Tests', () => {
         expect(uncompressedPublicKeyHex(x, y)).toBe(expectedHex);
     });
 
-    // Test for public key in PEM format
-    it("Test creation of a public key in PEM format", () => {
-        const x = "0ad99500288d466940031d72a9f5445a4d43784640855bf0a69874d2de5fe103";
-        const y = "00c5011e6ef2c42dcd50d5d3d29f99ae6eba2c80c9244f4c5422f0979ff0c3ba5e";
-        const expectedPem = "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAECtmVACiNRmlAAx1yqfVEWk1DeEZA\nhVvwpph00t5f4QPFAR5u8sQtzVDV09Kfma5uuiyAySRPTFQi8Jef8MO6Xg==\n-----END PUBLIC KEY-----";
-        expect(createPublicKeyPem(x, y)).toBe(expectedPem);
-    });
-
     it('correctly encodes r and s into signature in DER format', () => {
         // Example test case
         const rHex = "2ba3a8be6b94d5ec80a6d9d1190a436effe50d85a1eee859b8cc6af9bd5c2e18";
@@ -42,6 +34,8 @@ describe('Public Key Tests', () => {
         const result = derFromRS(rHex, sHex);
         expect(result).toBe(expectedDer);
     });
+
+
 
 
 });

@@ -1,4 +1,4 @@
-import { verifyVector } from './crypto_check_vector';
+import { verifyVector } from './verify_vector_crypto_subtle';
 
 describe('verifyVector', () => {
 
@@ -22,7 +22,7 @@ describe('verifyVector', () => {
             y: "c7787964eaac00e5921fb1498a60f4606766b3d9685001558d1a974e7341513e",
             r: "2ba3a8be6b94d5ec80a6d9d1190a436effe50d85a1eee859b8cc6af9bd5c2e18",
             s: "b329f479a2bbd0a5c384ee1493b1f5186a87139cac5df4087c134b49156847db",
-            msg: "313233343030",
+            msg: "313233343031",
             valid: false // This field is not used in the function but included for completeness
         };
 

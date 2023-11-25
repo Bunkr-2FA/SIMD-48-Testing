@@ -53,17 +53,17 @@ async function extractVectors(sourceName: string, sourceObj: any) {
   for (const group of sourceObj.testGroups) {
     let type_, publicKey_, sha_;
     console.log(`${sourceName} ${sourceName.includes("v1")}`);
-    
+
     //v1 and v0 have different key schemas, so here we have to differentiate between them
     // v1 -> publicKey ; v0 -> key
     if (sourceName.includes("v1")) {
-      const {type, publicKey, sha} = group;
+      const { type, publicKey, sha } = group;
       type_ = type;
       publicKey_ = publicKey;
       sha_ = sha;
     }
     else {
-      const {type, key, sha} = group;
+      const { type, key, sha } = group;
       type_ = type;
       publicKey_ = key;
       sha_ = sha;
@@ -107,10 +107,10 @@ async function extractVectors(sourceName: string, sourceObj: any) {
       // "acceptable" means Wycheproof doesn't say either result is mandatory.
       // We have two "acceptable" vectors, both valid according to SubtleCrypto.
       const valid = result === "valid" || result === "acceptable";
-      
+
 
       // calculate SHA256 hash of msgBytes
-      const msgBytes = Buffer.from(msg, "hex");
+      const msgBytes = Buffer.from(msg, "utf8");
       const msgHash = Buffer.from(await crypto.subtle.digest(sha_, msgBytes));
       assert(msgHash.length === 32, "hash must be 256 bits");
 
@@ -123,7 +123,6 @@ async function extractVectors(sourceName: string, sourceObj: any) {
         valid,
         msg,
         comment: `${testStr}: ${comment}`,
-        result,
       });
     }
   }
@@ -131,7 +130,7 @@ async function extractVectors(sourceName: string, sourceObj: any) {
 }
 
 // Parse r,s from an ASN.1-encoded signature
-export function tryParseASN(sig: string): [string, string] {
+function tryParseASN(sig: string): [string, string] {
   let r, rLen, s, sLen, totalLen;
   let rem = consume(sig, "30"); // SEQUENCE
   [totalLen, rem] = read(rem, 2); // length, verified at the end

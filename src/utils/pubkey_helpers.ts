@@ -1,7 +1,12 @@
-import { BerWriter, Ber } from 'asn1';
 
 
-export function uncompressedPublicKeyHex(x: string, y: string) {
+/**
+ * Creates properly formatted uncompressed pubkey from ```x``` and ```y``` coordinates
+ * @param x x-coordinate of pubkey as hex-string
+ * @param y y-coordinate of pubkey as hex-string
+ * @returns Uncompressed pubkey as hex-string
+ */
+export function uncompressedPublicKeyHex(x: string, y: string): string {
   // Truncate or pad each coordinate to 32 bytes (64 hex characters)
   const xPadded = x.length > 64 ? x.slice(-64) : x.padStart(64, '0');
   const yPadded = y.length > 64 ? y.slice(-64) : y.padStart(64, '0');
@@ -9,6 +14,12 @@ export function uncompressedPublicKeyHex(x: string, y: string) {
   return '04' + xPadded + yPadded;
 }
 
+/**
+ * Creates DER formatted signature from ```r``` and ```s``` values
+ * @param rHex r component as hex-string
+ * @param sHex s component as hex-string
+ * @returns DER signature in hex-string
+ */
 export function derFromRS(rHex: string, sHex: string) {
   const rBuffer = Buffer.from(rHex, 'hex');
   const sBuffer = Buffer.from(sHex, 'hex');
@@ -34,31 +45,5 @@ export function derFromRS(rHex: string, sHex: string) {
   return derEncoded.toString('hex');
 }
 
-/**
- * Creates a public key in PEM format from the x and y coordinates of a public key.
- * @param x The x coordinate of the public key in hex format.
- * @param y The y coordinate of the public key in hex format.
- * @returns 
- */
-export function createPublicKeyPem(x: string, y: string): string {
-
-  const publicKeyBuffer = Buffer.from(uncompressedPublicKeyHex(x, y), 'hex');
-
-  const writer = new BerWriter();
-
-  writer.startSequence();
-    writer.startSequence();
-      writer.writeOID('1.2.840.10045.2.1', Ber.OID); // ecPublicKey OID
-      writer.writeOID('1.2.840.10045.3.1.7', Ber.OID); // prime256v1 OID
-    writer.endSequence();
-    // Write the public key as a BitString, including the unused bits byte
-    writer.writeBuffer(Buffer.concat([Buffer.from([0x00]), publicKeyBuffer]), Ber.BitString);
-  writer.endSequence();
-
-  const derBuffer = writer.buffer;
-  const pem = `-----BEGIN PUBLIC KEY-----\n${derBuffer.toString('base64').match(/.{1,64}/g)?.join('\n')}\n-----END PUBLIC KEY-----`;
-
-  return pem;
-}
 
 

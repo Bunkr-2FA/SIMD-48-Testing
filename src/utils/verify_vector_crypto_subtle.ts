@@ -1,6 +1,5 @@
-import { promises as fsPromises } from 'fs';
 import crypto from 'crypto';
-import { createPublicKeyPem, uncompressedPublicKeyHex } from './create_pem_pubkey';
+import { uncompressedPublicKeyHex } from './pubkey_helpers';
 import { Vector } from '../types/vector'
 
 
