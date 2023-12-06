@@ -1,0 +1,34 @@
+[package]
+name = "secp256r1_verify-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+cargo-fuzz = "0.11.2"
+libfuzzer-sys = "0.4"
+solana-sdk = "1.17.6"
+
+[dependencies.secp256r1_verify]
+path = ".."
+
+# Prevent this from interfering with workspaces
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "fuzz_target_1"
+path = "fuzz_targets/fuzz_target_1.rs"
+test = false
+doc = false
+
+[profile.dev]
+debug = true
+rustc-flags = ["-Zinstrument-coverage"]
+
+[profile.release]
+debug = true
+rustc-flags = ["-Zinstrument-coverage"]

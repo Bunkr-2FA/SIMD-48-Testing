@@ -8,10 +8,12 @@ edition = "2021"
 [dependencies]
 bytemuck = {version="1.14.0", features=["derive"]}
 hex = "0.4.3"
-p256 = {version="0.10.1", "features"=["arithmetic", "ecdsa"]}
+p256 = {version="0.10.1", "features"=["ecdsa"]}
 rand = "0.8.5"
-serde = "1.0.193"
+serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
-solana-sdk = "1.17.5"
 thiserror = "1.0.50"
+
+
+
 

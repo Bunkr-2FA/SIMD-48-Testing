@@ -1,0 +1,8 @@
+llvm-cov report target/aarch64-apple-darwin/coverage/aarch64-apple-darwin/release/fuzz_target_1 \
+  --instr-profile=fuzz/coverage/fuzz_target_1/coverage.profdata \
+  --format=text \
+  --ignore-filename-regex='/rustc/.*/library/' \
+  --ignore-filename-regex='\.cargo/registry/src/index\.crates\.io-6f17d22bba15001f/der-0\.5\.1/src/' \
+  > index.html
+
+  
