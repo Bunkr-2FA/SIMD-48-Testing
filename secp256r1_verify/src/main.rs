@@ -1,10 +1,8 @@
-
-mod format_secp256r1_vector;
-mod secp256r1_instruction_test;
+pub mod utils;
 use std::fs::File;
 use std::io::Write;
-use secp256r1_verify::secp256r1_instruction::*;
-use format_secp256r1_vector::*;
+use utils::secp256r1_instruction::*;
+use utils::format_secp256r1_vector::*;
 use std::io::{self, BufRead, BufReader};
 
 

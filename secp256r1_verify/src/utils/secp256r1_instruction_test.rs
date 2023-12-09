@@ -2,7 +2,7 @@
 #[cfg(test)]
 mod tests {
     use rand::rngs::OsRng;
-    use secp256r1_verify::secp256r1_instruction::{self, verify};
+    use secp256r1_verify::secp256r1_instruction::verify;
     use bytemuck::{bytes_of,Zeroable, Pod};
     use p256::ecdsa::{SigningKey, VerifyingKey, signature::Signer};
 
@@ -13,7 +13,7 @@ mod tests {
     pub const SIGNATURE_OFFSETS_START: usize = 2;
     pub const DATA_START: usize = SIGNATURE_OFFSETS_SERIALIZED_SIZE + SIGNATURE_OFFSETS_START;
 
-    #[derive(Default, Debug, Copy, Clone, Zeroable,Pod, Eq, PartialEq)]
+    #[derive(Default, Debug, Copy, Clone, Zeroable, Pod, Eq, PartialEq)]
     #[repr(C)]
     pub struct Secp256r1SignatureOffsets {
         pub signature_offset: u16,             // offset to compact secp256r1 signature of 64 bytes

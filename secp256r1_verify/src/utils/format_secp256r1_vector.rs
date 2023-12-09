@@ -2,7 +2,7 @@ use bytemuck::bytes_of;
 use hex;
 use p256::elliptic_curve::bigint::Encoding;
 use serde::{Deserialize, Serialize};
-use secp256r1_verify::secp256r1_instruction::{COMPRESSED_PUBKEY_SERIALIZED_SIZE, DATA_START, SIGNATURE_SERIALIZED_SIZE, Secp256r1SignatureOffsets};
+use crate::utils::{COMPRESSED_PUBKEY_SERIALIZED_SIZE, DATA_START, SIGNATURE_SERIALIZED_SIZE, Secp256r1SignatureOffsets};
 use p256::elliptic_curve::bigint::U256;
 
 

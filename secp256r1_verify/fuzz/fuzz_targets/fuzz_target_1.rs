@@ -1,7 +1,7 @@
 #![no_main]
 
 use libfuzzer_sys::fuzz_target;
-use secp256r1_verify::secp256r1_instruction::verify;
+use secp256r1_verify::utils::secp256r1_instruction::verify;
 
 fuzz_target!(|data: &[u8]| {
     // Call the verify function with the fuzzed data
