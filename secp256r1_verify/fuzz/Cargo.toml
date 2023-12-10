@@ -10,7 +10,7 @@ cargo-fuzz = true
 [dependencies]
 cargo-fuzz = "0.11.2"
 libfuzzer-sys = "0.4"
-solana-sdk = "1.17.6"
+hex = "0.4"
 
 [dependencies.secp256r1_verify]
 path = ".."
