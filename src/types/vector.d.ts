@@ -9,6 +9,9 @@
  * - `valid`: Indicates whether the vector represents a valid signature.
  */
 export interface Vector {
+  /** The signature in DER format, hex-encoded. */
+  der: string;
+
   /** The 'x' coordinate of the elliptic curve point, hex-encoded. */
   x: string;
 
@@ -16,7 +19,7 @@ export interface Vector {
   y: string;
 
   r: string;
-  
+
   s: string;
 
   /** The original message to be signed or verified. */
@@ -24,4 +27,7 @@ export interface Vector {
 
   /** Indicates whether the vector represents a valid signature. */
   valid: boolean;
+
+  /** A comment about the vector. */
+  comment: string;
 }

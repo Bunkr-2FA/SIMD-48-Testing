@@ -7,8 +7,9 @@ use p256::elliptic_curve::bigint::U256;
 
 
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct TestVector {
+    pub der: String,
     pub x: String,
     pub y: String,
     pub r: String,

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import fs from "fs";
 
 
-const VECTORAMOUNT = 1000;
+const VECTORAMOUNT = 2000;
 
 // Generate random signatures for benchmarking gas usage.
 // Representative of real-world usage.
@@ -42,7 +42,7 @@ async function main() {
 
     // Create p256 signature over message
     const sigRaw = await crypto.subtle.sign(p256, key.privateKey, msgBuf);
-    
+
     // Grab x and y coordinates from our hex-string pubkey
     const pubKey = Buffer.from(pubKeyHex.substring(54), "hex");
 
@@ -55,19 +55,11 @@ async function main() {
     const r = Buffer.from(sigRaw).subarray(0, 32).toString("hex");
     const s = Buffer.from(sigRaw).subarray(32, 64).toString("hex");
 
-    // Create vector object
-    const vector = {
-      x: x,
-      y: y,
-      r: r,
-      s: s,
-      sig: "",
-      msg: msg,
-      valid: true
-    };
+
 
     // Add vector to our array
     vectors.push({
+      der: "",
       x,
       y,
       r,
@@ -81,7 +73,6 @@ async function main() {
 
   // Write all vectors to JSON
   const filepath = "./test_vectors/vectors_random_valid.jsonl";
-  console.log(`Writing ${vectors.length} vectors to ${filepath}`);
   const lines = vectors.map((v) => JSON.stringify(v));
   fs.writeFileSync(filepath, lines.join("\n"));
 }
@@ -91,5 +82,5 @@ function assert(cond: boolean, msg: string) {
 }
 
 main()
-  .then(() => console.log(`Successfully generated ${VECTORAMOUNT} valide vectors ✅`))
+  .then(() => console.log(`Successfully generated ${VECTORAMOUNT} valid vectors ✅`))
   .catch((err) => console.error(err));

@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 bytemuck = {version="1.14.0", features=["derive"]}
 hex = "0.4.3"
+openssl = "0.10.62"
 p256 = {version="0.10.1", "features"=["ecdsa"]}
 rand = "0.8.5"
 serde = { version = "1.0.193", features = ["derive"] }

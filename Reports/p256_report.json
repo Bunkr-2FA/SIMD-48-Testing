@@ -1,0 +1,17 @@
+{
+  "total_vectors": 13202,
+  "incorrect_count": 1,
+  "incorrect_vectors": [
+    {
+      "der": "304402202ba3a8be6b94d5ec80a6d9d1190a436effe50d85a1eee859b8cc6af9bd5c2e180220b329f479a2bbd0a5c384ee1493b1f5186a87139cac5df4087c134b49156847db",
+      "x": "2927b10512bae3eddcfe467828128bad2903269919f7086069c8c4df6c732838",
+      "y": "c7787964eaac00e5921fb1498a60f4606766b3d9685001558d1a974e7341513e",
+      "r": "2ba3a8be6b94d5ec80a6d9d1190a436effe50d85a1eee859b8cc6af9bd5c2e18",
+      "s": "b329f479a2bbd0a5c384ee1493b1f5186a87139cac5df4087c134b49156847db",
+      "hash": "bb5a52f42f9c9261ed4361f59422a1e30036e7c32b270c8807a419feca605023",
+      "valid": false,
+      "msg": "313233343030",
+      "comment": "wycheproof_v1/ecdsa_secp256r1_sha256_test.json EcdsaVerify SHA-256 #6: Legacy: ASN encoding of s misses leading 0"
+    }
+  ]
+}

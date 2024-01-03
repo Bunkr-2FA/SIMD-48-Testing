@@ -52,9 +52,8 @@ async function extractVectors(sourceName: string, sourceObj: any) {
   const vectors = [];
   for (const group of sourceObj.testGroups) {
     let type_, publicKey_, sha_;
-    console.log(`${sourceName} ${sourceName.includes("v1")}`);
 
-    //v1 and v0 have different key schemas, so here we have to differentiate between them
+    // v1 and v0 have different key schemas, so here we have to differentiate between them
     // v1 -> publicKey ; v0 -> key
     if (sourceName.includes("v1")) {
       const { type, publicKey, sha } = group;
@@ -70,11 +69,11 @@ async function extractVectors(sourceName: string, sourceObj: any) {
     }
     //const { type, publicKey_, sha } = group;
     if (publicKey_.curve !== "secp256r1") {
-      console.log(`Skipping unsupported curve ${type_} ${publicKey_.curve}`);
+      //console.log(`Skipping unsupported curve ${type_} ${publicKey_.curve}`);
       continue;
     }
     if (sha_ !== "SHA-256") {
-      console.log(`Skipping unsupported hash ${type_} ${sha_}`);
+      //console.log(`Skipping unsupported hash ${type_} ${sha_}`);
       continue;
     }
 
@@ -98,7 +97,7 @@ async function extractVectors(sourceName: string, sourceObj: any) {
         if (isASN) [r, s] = tryParseASN(sig);
         else[r, s] = tryParseP1363(sig);
       } catch (e: any) {
-        console.warn(`Skipping bad sig ${testStr}: ${e.message} ${comment}`);
+        //console.warn(`Skipping bad sig ${testStr}: ${e.message} ${comment}`);
         continue;
       }
 
@@ -110,11 +109,12 @@ async function extractVectors(sourceName: string, sourceObj: any) {
 
 
       // calculate SHA256 hash of msgBytes
-      const msgBytes = Buffer.from(msg, "utf8");
+      const msgBytes = Buffer.from(msg, "hex");
       const msgHash = Buffer.from(await crypto.subtle.digest(sha_, msgBytes));
       assert(msgHash.length === 32, "hash must be 256 bits");
 
       vectors.push({
+        der: sig,
         x: x.padStart(64, "0"),
         y: y.padStart(64, "0"),
         r: r.padStart(64, "0"),

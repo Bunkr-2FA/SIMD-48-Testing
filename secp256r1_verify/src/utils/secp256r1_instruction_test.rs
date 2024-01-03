@@ -1,8 +1,10 @@
 
+mod tests {
+    use super::*;
 #[cfg(test)]
 mod tests {
     use rand::rngs::OsRng;
-    use secp256r1_verify::secp256r1_instruction::verify;
+    use crate::utils::secp256r1_instruction::verify;
     use bytemuck::{bytes_of,Zeroable, Pod};
     use p256::ecdsa::{SigningKey, VerifyingKey, signature::Signer};
 
@@ -100,4 +102,5 @@ mod tests {
     }
 
     
+}
 }

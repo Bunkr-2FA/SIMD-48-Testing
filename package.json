@@ -5,7 +5,8 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node --loader ts-node/esm index.ts",
-		"test": "jest"
+		"test": "jest",
+		"generate_vectors": "ts-node test_vectors/generate_random_valid.ts && ts-node test_vectors/generate_random_mix.ts && ts-node test_vectors/generate_wycheproof.ts "
 	},
 	"keywords": [],
 	"author": "",

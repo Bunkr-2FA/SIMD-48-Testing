@@ -5,8 +5,8 @@ import { Vector } from '../types/vector'
 function parseJsonLine(line: string) {
   try {
     const data = JSON.parse(line);
-    const { x, y, r, s, msg, valid } = data;
-    return { x, y, r, s, msg, valid };
+    const { der, x, y, r, s, msg, valid, comment } = data;
+    return { der, x, y, r, s, msg, valid, comment };
   } catch (error) {
     console.error(`Error parsing JSON in line: ${line}`);
     return null;
@@ -28,12 +28,14 @@ export async function readJsonLFile(filePath: string): Promise<Vector[]> {
         if (parsedData) {
           vectors.push(
             {
+              der: parsedData.der,
               x: parsedData.x,
               y: parsedData.y,
               r: parsedData.r,
               s: parsedData.s,
               msg: parsedData.msg,
-              valid: parsedData.valid
+              valid: parsedData.valid,
+              comment: parsedData.comment
             }
           );
         }
@@ -48,12 +50,14 @@ export async function readJsonLFile(filePath: string): Promise<Vector[]> {
         if (parsedData) {
           vectors.push(
             {
+              der: parsedData.der,
               x: parsedData.x,
               y: parsedData.y,
               r: parsedData.r,
               s: parsedData.s,
               msg: parsedData.msg,
-              valid: parsedData.valid
+              valid: parsedData.valid,
+              comment: parsedData.comment
             }
           );
         }
