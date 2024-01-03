@@ -129,7 +129,36 @@ async function extractVectors(sourceName: string, sourceObj: any) {
   return vectors;
 }
 
-// Parse r,s from an ASN.1-encoded signature
+// Testing weird stuff out
+// function tryParseASN(sig: string): [string, string] {
+//   let r, s, totalLen;
+//   let rem = consume(sig, "30"); // SEQUENCE
+//   [totalLen, rem] = read(rem, 2); // length, verified at the end
+//   assert(parseInt(totalLen, 16) === sig.length / 2 - 2, "wrong total length");
+
+//   // Parse r
+//   rem = consume(rem, "02"); // INTEGER
+//   const [rLen, rRem] = read(rem, 2);
+//   const rLength = parseInt(rLen, 16);
+//   [r, rem] = read(rRem, rLength * 2); // Read rLength bytes in hex
+
+//   // Parse s
+//   rem = consume(rem, "02"); // INTEGER
+//   const [sLen, sRem] = read(rem, 2);
+//   const sLength = parseInt(sLen, 16);
+//   [s, rem] = read(sRem, sLength * 2); // Read sLength bytes in hex
+
+//   assert(rem === "", "extra trailing bytes");
+
+//   // Normalize r and s to remove any leading zeros and ensure 32 bytes
+//   r = BigInt('0x' + r).toString(16).padStart(64, '0');
+//   s = BigInt('0x' + s).toString(16).padStart(64, '0');
+
+//   return [r, s];
+// }
+
+
+//Parse r,s from an ASN.1-encoded signature
 function tryParseASN(sig: string): [string, string] {
   let r, rLen, s, sLen, totalLen;
   let rem = consume(sig, "30"); // SEQUENCE
