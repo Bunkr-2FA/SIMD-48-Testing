@@ -71,13 +71,13 @@ to test the ASN.1 decoding process of certain crypto implementations.
 In the case of SIMD-48, the precompile only accepts a compressed pubkey and
 a serialized signature consisting of the concatenated `r` and `s` values.
 This means that no signature decoding happens inside the precompile.
-As the vector signatures are disfigured, it's not possible to correctly
+As those vector's signatures are disfigured, it's not possible to correctly
 extract `r` and `s` from them. Therefore these vectors are ignored.
 
 Note: There is however a legacy vector that gets successfully parsed by the
 ASN.1 decoding found in `src/generate_wycheproof.ts`. The vector's
-signature is missing a 0 in it's `s` component. As described by
-Project Wycheproof:
+signature is missing a 0 in it's `s` component. The behavior of the vector is
+described by Project Wycheproof:
 
 ```json
 "MissingZero" : {
@@ -182,7 +182,7 @@ OpenSSL:
 ```
 
 As shown above, all 3 implementation have parity across 13202 test vectors and
-exhibit the mismatch mention in [Wycheproof Vectors](#wycheproof-vectors).
+exhibit the mismatch mentioned in [Wycheproof Vectors](#wycheproof-vectors).
 
 Note: Of the 13202 vectors, 1202 come from Project Wycheproof.
 
