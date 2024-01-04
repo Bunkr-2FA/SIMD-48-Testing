@@ -1,6 +1,5 @@
 pub mod utils;
 use std::fs::File;
-use crate::utils::create_der_encoded_signature;
 use crate::utils::openssl_verify_vector;
 use crate::utils::secp256r1_instruction::*;
 use crate::utils::format_secp256r1_vector::*;
@@ -43,7 +42,7 @@ use std::io::{self, BufRead, BufReader};
                             p256_report.add_incorrect_vector(test_vector.clone());
                         }
                     },
-                    Err(e) => {
+                    Err(_e) => {
                         if test_vector.valid == true {
                             // Uncomment for debugging
                             // println!("SIMD-48 Verification failed for should-be valid vector: {:#?}\n", test_vector);
@@ -64,7 +63,7 @@ use std::io::{self, BufRead, BufReader};
                             openssl_report.add_incorrect_vector(test_vector.clone());
                         }
                     },
-                    Err(e) => {
+                    Err(_e) => {
                         if test_vector.valid == true {
                             // Uncomment for debugging
                             //println!("OpenSSL Verification failed for should-be valid vector: {:#?}\n", test_vector);
