@@ -29,6 +29,7 @@ as well as an OpenSSL implementation to ensure parity between the three.
 3. (Optional) Run the following command to re-fetch and generate new vectors:
    `npm run generate_vectors`
 4. Generate reports for SubtleCrypto, OpenSSL and p256: `npm run generate_reports`
+5. Run benchmark against vectors: `npm run benchmark`
 
 ## Wycheproof Vectors
 
@@ -184,3 +185,9 @@ As shown above, all 3 implementation have parity across 13202 test vectors and
 exhibit the mismatch mention in [Wycheproof Vectors](#wycheproof-vectors).
 
 Note: Of the 13202 vectors, 1202 come from Project Wycheproof.
+
+## Benchmarking
+
+The following benchmark was run on a 16GB M1 Pro Macbook Pro.
+
+![benchmark](/images/M1%20Pro%20Benchmark.png)

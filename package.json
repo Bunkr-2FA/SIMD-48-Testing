@@ -7,7 +7,8 @@
 		"start": "node --loader ts-node/esm index.ts",
 		"test": "jest",
 		"generate_vectors": "ts-node test_vectors/generate_random_valid.ts && ts-node test_vectors/generate_random_mix.ts && ts-node test_vectors/generate_wycheproof.ts ",
-		"generate_reports": "ts-node src/validate_vectors_crypto_subtle.ts && cd secp256r1_verify/ && cargo run --release && cd -"
+		"generate_reports": "ts-node src/validate_vectors_crypto_subtle.ts && cd secp256r1_verify/ && cargo run --release && cd -",
+		"benchmark": "cd secp256r1_verify && cargo bench && cd -"
 	},
 	"keywords": [],
 	"author": "",
