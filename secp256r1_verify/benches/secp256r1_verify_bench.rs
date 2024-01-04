@@ -1,4 +1,4 @@
-use criterion::{criterion_group, criterion_main, Criterion, BenchmarkId};
+use criterion::{criterion_group, Criterion, BenchmarkId};
 use std::fs::File;
 use std::io::{stdin, BufRead, BufReader};
 use secp256r1_verify::utils::*;
@@ -23,6 +23,7 @@ pub fn get_test_vectors() -> Vec<TestVector> {
             test_vectors.push(test_vector);
         }
     }
+    println!("Total test vectors: {}", test_vectors.len());
     test_vectors
 }
 
@@ -50,13 +51,8 @@ fn calculate_compute() {
     stdin().read_line(&mut upper_bound_str).expect("Failed to read line");
     let upper_bound_ms: f64 = upper_bound_str.trim().parse().expect("Please enter a valid number!");
 
-    // Ask the user for the number of test vectors
-    println!("Enter the total number of test vectors:");
-    
-    // Read the number of test vectors from the console
-    let mut total_vectors_str = String::new();
-    stdin().read_line(&mut total_vectors_str).expect("Failed to read line");
-    let total_vectors: usize = total_vectors_str.trim().parse().expect("Please enter a valid number!");
+    // Get the total number of test vectors
+    let total_vectors = get_test_vectors().len();
 
     // Convert milliseconds to nanoseconds and calculate the average time per verification
     let upper_bound_ns = upper_bound_ms * 1_000_000.0;
