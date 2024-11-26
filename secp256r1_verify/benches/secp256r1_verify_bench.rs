@@ -8,7 +8,7 @@ use secp256r1_verify::utils::*;
 pub fn get_test_vectors() -> Vec<TestVector> {
     // Define paths to test vector files
     let paths = vec![
-    "../test_vectors/vectors_random_valid.jsonl", 
+    "../test_vectors/vectors_random_valid.jsonl",
     "../test_vectors/vectors_wycheproof.jsonl"
     ];
     let mut test_vectors = Vec::new();
@@ -30,22 +30,28 @@ pub fn get_test_vectors() -> Vec<TestVector> {
 pub fn bench_secp256r1_verify(c: &mut Criterion) {
     let test_vectors = get_test_vectors();
     let total_vectors = test_vectors.len();
-    
+
+    // Pre-generate all instruction data outside the benchmark
+    let instruction_data_vec: Vec<_> = test_vectors
+        .iter()
+        .map(|tv| new_secp256r1_instruction_from_vector(tv))
+        .collect();
+
     // Benchmark the entire execution of all test vectors as a single benchmark
-    c.bench_with_input(BenchmarkId::new("secp256r1_verify", total_vectors), &test_vectors, |b, tvs| {
+    c.bench_with_input(BenchmarkId::new("secp256r1_verify", total_vectors), &instruction_data_vec, |b, instructions| {
         b.iter(|| {
-            for tv in tvs {
-                let instruction_data = new_secp256r1_instruction_from_vector(tv);
-                let _ = secp256r1_instruction::verify(&instruction_data, &[&[0u8; 100]]);
+            for instruction in instructions {
+                let _ = secp256r1_instruction::verify(instruction, &[&[0u8; 100]]);
             }
         });
     });
 }
 
 fn calculate_compute() {
+    println!("P256 Verify Benchmark\n");
     // Ask the user for the upper bound value
     println!("Enter the upper bound time in milliseconds:");
-    
+
     // Read the upper bound from the console
     let mut upper_bound_str = String::new();
     stdin().read_line(&mut upper_bound_str).expect("Failed to read line");
@@ -64,7 +70,7 @@ fn calculate_compute() {
 
 criterion_group! {
     name = benches;
-    config = Criterion::default().sample_size(100); // Adjust sample size as needed
+    config = Criterion::default().sample_size(10); // Adjust sample size as needed
     targets = bench_secp256r1_verify
 }
 

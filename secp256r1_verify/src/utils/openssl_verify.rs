@@ -1,12 +1,35 @@
+use crate::utils::format_secp256r1_vector::*;
+use crate::utils::{
+    get_data_slice, PrecompileError, Secp256r1SignatureOffsets, COMPRESSED_PUBKEY_SERIALIZED_SIZE,
+    SIGNATURE_OFFSETS_SERIALIZED_SIZE, SIGNATURE_OFFSETS_START, SIGNATURE_SERIALIZED_SIZE,
+};
 use openssl::bn::{BigNum, BigNumContext};
 use openssl::ec::{EcGroup, EcKey, EcPoint};
-use openssl::pkey::{PKey};
 use openssl::nid::Nid;
+use openssl::pkey::PKey;
 use openssl::sign::Verifier;
 use std::error::Error;
 use std::vec;
-use crate::utils::format_secp256r1_vector::*;
 
+// Order as defined in SEC2: 2.7.2 Recommended Parameters secp256r1
+pub const SECP256R1_ORDER: [u8; 32] = [
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xBC, 0xE6, 0xFA, 0xAD, 0xA7, 0x17, 0x9E, 0x84, 0xF3, 0xB9, 0xCA, 0xC2, 0xFC, 0x63, 0x25, 0x51,
+];
+
+// Computed SECP256R1_ORDER - 1
+pub const SECP256R1_ORDER_MINUS_ONE: [u8; 32] = [
+    0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xBC, 0xE6, 0xFA, 0xAD, 0xA7, 0x17, 0x9E, 0x84, 0xF3, 0xB9, 0xCA, 0xC2, 0xFC, 0x63, 0x25, 0x50,
+];
+
+// Computed half order
+const SECP256R1_HALF_ORDER: [u8; 32] = [
+    0x7F, 0xFF, 0xFF, 0xFF, 0x80, 0x00, 0x00, 0x00, 0x7F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xDE, 0x73, 0x7D, 0x56, 0xD3, 0x8B, 0xCF, 0x42, 0x79, 0xDC, 0xE5, 0x61, 0x7E, 0x31, 0x92, 0xA8,
+];
+// Field size in bytes
+const FIELD_SIZE: usize = 32;
 
 pub fn create_der_encoded_signature(r_hex: &str, s_hex: &str) -> Result<Vec<u8>, Box<dyn Error>> {
     // Decode the hex strings to byte arrays
@@ -25,8 +48,6 @@ pub fn create_der_encoded_signature(r_hex: &str, s_hex: &str) -> Result<Vec<u8>,
 
     Ok(der_encoded_sig)
 }
-
-
 
 pub fn openssl_verify_vector(vector: &TestVector) -> Result<(), Box<dyn Error>> {
     // Load the P-256 curve
@@ -53,7 +74,7 @@ pub fn openssl_verify_vector(vector: &TestVector) -> Result<(), Box<dyn Error>> 
     let der_signature = create_der_encoded_signature(&vector.r, &vector.s)?;
 
     //println!("DER Signature: {:x?}", hex::encode(&der_signature));
-    
+
     // Convert EcKey<Public> to PKey
     let pkey = PKey::from_ec_key(public_key)?;
 
@@ -75,8 +96,131 @@ pub fn openssl_verify_vector(vector: &TestVector) -> Result<(), Box<dyn Error>> 
     if verifier.verify(&der_signature)? {
         Ok(())
     } else {
-        Err(Box::new(std::io::Error::new(std::io::ErrorKind::InvalidData, "Signature verification failed")))
+        Err(Box::new(std::io::Error::new(
+            std::io::ErrorKind::InvalidData,
+            "Signature verification failed",
+        )))
     }
+}
+
+pub fn op_verify(data: &[u8], instruction_datas: &[&[u8]]) -> Result<(), PrecompileError> {
+    if data.len() < SIGNATURE_OFFSETS_START {
+        return Err(PrecompileError::InvalidInstructionDataSize);
+    }
+    let num_signatures = data[0] as usize;
+    if num_signatures == 0 {
+        return Err(PrecompileError::InvalidInstructionDataSize);
+    }
+    if num_signatures > 8 {
+        return Err(PrecompileError::InvalidInstructionDataSize);
+    }
+    if num_signatures == 0 && data.len() > SIGNATURE_OFFSETS_START {
+        return Err(PrecompileError::InvalidInstructionDataSize);
+    }
+    let expected_data_size = num_signatures
+        .saturating_mul(SIGNATURE_OFFSETS_SERIALIZED_SIZE)
+        .saturating_add(SIGNATURE_OFFSETS_START);
+
+    // We do not check or use the byte at data[1]
+    if data.len() < expected_data_size {
+        return Err(PrecompileError::InvalidInstructionDataSize);
+    }
+
+    // Parse half order from constant
+    let half_order: BigNum =
+        BigNum::from_slice(&SECP256R1_HALF_ORDER).map_err(|_| PrecompileError::InvalidSignature)?;
+
+    // Parse order - 1 from constant
+    let order_minus_one: BigNum = BigNum::from_slice(&SECP256R1_ORDER_MINUS_ONE)
+        .map_err(|_| PrecompileError::InvalidSignature)?;
+
+    // Create a BigNum for 1
+    let one = BigNum::from_u32(1).map_err(|_| PrecompileError::InvalidSignature)?;
+
+    // Define curve group
+    let group = EcGroup::from_curve_name(Nid::X9_62_PRIME256V1)
+        .map_err(|_| PrecompileError::InvalidSignature)?;
+    let mut ctx = BigNumContext::new().map_err(|_| PrecompileError::InvalidSignature)?;
+
+    for i in 0..num_signatures {
+        let start = i
+            .saturating_mul(SIGNATURE_OFFSETS_SERIALIZED_SIZE)
+            .saturating_add(SIGNATURE_OFFSETS_START);
+        let end = start.saturating_add(SIGNATURE_OFFSETS_SERIALIZED_SIZE);
+
+        // bytemuck wants structures aligned
+        let offsets: &Secp256r1SignatureOffsets = bytemuck::try_from_bytes(&data[start..end])
+            .map_err(|_| PrecompileError::InvalidDataOffsets)?;
+
+        // Parse out signature
+        let signature = get_data_slice(
+            data,
+            instruction_datas,
+            offsets.signature_instruction_index,
+            offsets.signature_offset,
+            SIGNATURE_SERIALIZED_SIZE,
+        )?;
+
+        // Parse out pubkey
+        let pubkey = get_data_slice(
+            data,
+            instruction_datas,
+            offsets.public_key_instruction_index,
+            offsets.public_key_offset,
+            COMPRESSED_PUBKEY_SERIALIZED_SIZE,
+        )?;
+
+        // Parse out message
+        let message = get_data_slice(
+            data,
+            instruction_datas,
+            offsets.message_instruction_index,
+            offsets.message_data_offset,
+            offsets.message_data_size as usize,
+        )?;
+
+        let r_bignum = BigNum::from_slice(&signature[..FIELD_SIZE])
+            .map_err(|_| PrecompileError::InvalidSignature)?;
+        let s_bignum = BigNum::from_slice(&signature[FIELD_SIZE..])
+            .map_err(|_| PrecompileError::InvalidSignature)?;
+
+        // Check that r and s are within the proper range and enforce a low-S value
+        let within_range = r_bignum >= one
+            && r_bignum <= order_minus_one
+            && s_bignum >= one
+            && s_bignum <= half_order;
+
+        if !within_range {
+            return Err(PrecompileError::InvalidSignature);
+        }
+
+        // Create an ECDSA signature object from the ASN.1 integers
+        let ecdsa_sig = openssl::ecdsa::EcdsaSig::from_private_components(r_bignum, s_bignum)
+            .and_then(|sig| sig.to_der())
+            .map_err(|_| PrecompileError::InvalidSignature)?;
+
+        let public_key_point = EcPoint::from_bytes(&group, pubkey, &mut ctx)
+            .map_err(|_| PrecompileError::InvalidPublicKey)?;
+        let public_key = EcKey::from_public_key(&group, &public_key_point)
+            .map_err(|_| PrecompileError::InvalidPublicKey)?;
+        let public_key_as_pkey =
+            PKey::from_ec_key(public_key).map_err(|_| PrecompileError::InvalidPublicKey)?;
+
+        let mut verifier =
+            Verifier::new(openssl::hash::MessageDigest::sha256(), &public_key_as_pkey)
+                .map_err(|_| PrecompileError::InvalidSignature)?;
+        verifier
+            .update(message)
+            .map_err(|_| PrecompileError::InvalidSignature)?;
+
+        if !verifier
+            .verify(&ecdsa_sig)
+            .map_err(|_| PrecompileError::InvalidSignature)?
+        {
+            return Err(PrecompileError::InvalidSignature);
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]
@@ -137,9 +281,12 @@ mod tests {
         }"#;
         let test_vector: TestVector = from_str(test_vector_json).expect("Failed to parse JSON");
         let result = openssl_verify_vector(&test_vector);
-        // Print result 
+        // Print result
         println!("Test vector: {:#?}\n", test_vector);
         println!("Result: {:?}", result);
-        assert!(result.is_err(), "Verification passed for an invalid vector.");
+        assert!(
+            result.is_err(),
+            "Verification passed for an invalid vector."
+        );
     }
 }

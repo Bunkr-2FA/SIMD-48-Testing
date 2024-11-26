@@ -23,4 +23,7 @@ criterion = "0.5.1"
 name = "secp256r1_verify_bench"
 harness = false
 
+[[bench]]
+name = "openssl_verify_bench"
+harness = false
 

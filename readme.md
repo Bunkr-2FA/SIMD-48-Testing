@@ -2,14 +2,14 @@
 
 ## Introduction
 
-This repository is focused on the testing and fuzzing of the `secp256r1` implementation found in [SIMD-0048](https://github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0048-native-program-for-secp256r1-sigverify.md).
+This repository is focused on the testing and fuzzing of the `secp256r1`
+implementation found in [SIMD-0048](https:github.com/solana-foundation/solana-improvement-documents/blob/main/proposals/0048-native-program-for-secp256r1-sigverify.md)
 
 ## Purpose
 
 The aim is to ensure the robustness and security of `secp256r1` implementation
 by providing comprehensive tests from the wycheproof project as well as some
-fuzzing strategies.
-Additionally all test vectors are run against a SubleCrypto implementation
+fuzzing strategies. Additionally all test vectors are run against a SubleCrypto implementation
 as well as an OpenSSL implementation to ensure parity between the three.
 
 ## Contents
